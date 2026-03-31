@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Resume Analyzer</title>
+</head>
+<body>
+
+    <h2>AI Resume Analyzer</h2>
+
+    <form id="form">
+        <input type="file" id="file" required><br><br>
+
+        <textarea id="job_desc" placeholder="Enter job description..." rows="6" cols="50"></textarea><br><br>
+
+        <button type="submit">Analyze</button>
+    </form>
+
+    <h3>Result:</h3>
+    <pre id="result"></pre>
+
+    <script>
+        document.getElementById("form").addEventListener("submit", async function(e) {
+            e.preventDefault();
+
+            const fileInput = document.getElementById("file");
+            const jobDesc = document.getElementById("job_desc").value;
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+            formData.append("job_desc", jobDesc);
+
+            const response = await fetch("http://127.0.0.1:8000/analyze-resume", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            document.getElementById("result").textContent = JSON.stringify(data, null, 2);
+        });
+    </script>
+
+</body>
+</html>
